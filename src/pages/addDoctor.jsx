@@ -1,35 +1,42 @@
-import { useState } from "react";
+import axios from "axios";
+import { useState } from "react"
+import { useNavigate } from "react-router-dom";
 
 function AddDoctor(){
-    let [name,setName] = useState("");
-    let [salary,setSalary] = useState("");
-    let [gender,setGender] = useState("");
-    let [age,setAge] = useState("");
-    let [specialization,setSpecialization] = useState("");
+    let[name,setName]=useState("");
+    let[age,setAge]=useState("");
+    let[salary,setSalary]=useState("");
+    let[gender,setGender]=useState("");
+    let[specialization,setSpecialization]=useState("");
+    let nav=useNavigate();
 
-
-    let handleSubmit = (e) =>{
+    let handleSubmit = async(e) =>{
         e.preventDefault();
-        console.log("Name:"+name);
-        console.log("Salary:"+salary);
-        console.log("Gender:"+gender);
-        console.log("Age:"+age);
-        console.log("Specialization:"+specialization);
-
+        let addDoctor= {name,age,salary,specialization,gender}
+        let data=await axios.post("https://api-bdti.onrender.com/doctors",addDoctor)
+        alert("Doctor Added Successfully.......")
+        nav("/")
+        setName("")
+        setAge("")
+        setSalary("")
+        setGender("")
+        setSpecialization("")
     }
-    
     return(
-        <div>
-            <form>
+        <>
+            <div>
                 <h1>Add Doctor</h1>
-                <input type="text" placeholder="Enter your Name" onChange={(e)=>{setName(e.target.value)}}/> <br /> <br />
-                <input type="text" placeholder="Enter your Salary"/> <br /> <br />
-                <input type="text" placeholder="Enter your Gender"/> <br /> <br />
-                <input type="text" placeholder="Enter your Age"/> <br /> <br />
-                <input type="text" placeholder="Enter your Specialization"/> <br /> <br />
-                <input type="submit" />
-            </form>
-        </div>
+                <form onSubmit={handleSubmit}>
+                    <input type="text" placeholder="enter your name" value={name} onChange={(e)=>{setName(e.target.value)}} /> <br/><br/>
+                    <input type="text" placeholder="enter your salary" value={salary} onChange={(e)=>{setSalary(e.target.value)}} /> <br/><br/>
+                    <input type="text" placeholder="enter your gender" value={gender} onChange={(e)=>{setGender(e.target.value)}} /> <br/><br/>
+                    <input type="text" placeholder="enter your age" value={age} onChange={(e)=>{setAge(e.target.value)}} /> <br/><br/>
+                    <input type="text" placeholder="enter your specialization" value={specialization} onChange={(e)=>{setSpecialization(e.target.value)}} /> <br/><br/>
+                    <input type="submit"/>
+                </form>
+            </div>
+        </>
     )
 }
+
 export default AddDoctor;
